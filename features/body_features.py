@@ -124,8 +124,7 @@ def keypoints_to_numpy(pose_file, pose_emb_path):
     
     video_pose_landmarks = np.array(video_pose_landmarks)
     
-    # fill the left wrist and right wrist with -9999. in the last 4 elements of the vector
-    video_pose_landmarks[:,:2] = -9999.0    
+  
     np_path = Path(pose_emb_path) / Path(f"{str(pose_file).split('/')[-1].rsplit('.', 1)[0]}.npy")
     np_path.parent.mkdir(parents=True, exist_ok=True)
     np.save(np_path, video_pose_landmarks)
