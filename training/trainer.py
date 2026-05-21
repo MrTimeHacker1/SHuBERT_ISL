@@ -57,6 +57,8 @@ class Trainer:
 
     def train(self, dataloader: DataLoader, epochs: int) -> None:
         global_step = 0
+        if len(dataloader) == 0:
+            raise ValueError("Dataloader is empty. Ensure features and clusters are available.")
         for epoch in range(1, epochs + 1):
             epoch_loss = 0.0
             self.model.train()
@@ -81,7 +83,7 @@ class Trainer:
                     self.writer.add_scalar("train/loss", loss.item() * self.grad_accum_steps, global_step)
                 global_step += 1
 
-            avg_loss = epoch_loss / max(1, len(dataloader))
+            avg_loss = epoch_loss / len(dataloader)
             logger.info("Epoch %d | loss=%.4f", epoch, avg_loss)
             self.writer.add_scalar("train/epoch_loss", avg_loss, epoch)
 

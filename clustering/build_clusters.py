@@ -5,6 +5,7 @@ import argparse
 from pathlib import Path
 from typing import Dict
 
+import numpy as np
 import yaml
 
 from clustering.cluster_utils import (
@@ -74,8 +75,6 @@ def main(config_path: Path) -> None:
 
 
 def _load_seed_features(feature_dir: Path, part: str) -> "np.ndarray":
-    import numpy as np
-
     for feature_path in iter_feature_files(feature_dir):
         data = load_feature_file(feature_path)
         if data[part].shape[0] > 0:

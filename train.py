@@ -7,6 +7,7 @@ from typing import Dict
 
 import yaml
 import torch
+import numpy as np
 from torch.utils.data import DataLoader
 
 from datasets.isl_dataset import DatasetConfig, ISLVideoDataset, ISLFeatureDataset
@@ -67,8 +68,6 @@ def cache_features(cfg: Dict) -> None:
             "body": features["body"],
             "combined": features["combined"],
         }
-        import numpy as np
-
         np.savez(output_path, **npz_data)
         logger.info("Cached features: %s", output_path)
 

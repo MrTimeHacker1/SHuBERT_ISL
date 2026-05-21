@@ -45,7 +45,7 @@ def plot_temporal_trajectory(embeddings: np.ndarray, output_path: Path) -> None:
         embeddings: [T, D] array.
         output_path: Path to save the plot.
     """
-    if embeddings.shape[0] < 2:
+    if embeddings.ndim != 2 or embeddings.shape[1] < 2 or embeddings.shape[0] < 2:
         return
     coords = embeddings[:, :2]
     plt.figure(figsize=(8, 6))

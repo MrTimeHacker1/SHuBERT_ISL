@@ -71,8 +71,16 @@ class MediaPipeExtractor:
         indices = [0, 11, 12, 13, 14, 15, 16]
         if landmarks is None:
             return np.full((len(indices), 3), np.nan, dtype=np.float32)
-        coords = np.array([[landmarks.landmark[i].x, landmarks.landmark[i].y, landmarks.landmark[i].z] for i in indices], dtype=np.float32)
+        coords = np.array(
+            [MediaPipeExtractor._pose_landmark(landmarks, i) for i in indices],
+            dtype=np.float32,
+        )
         return coords
+
+    @staticmethod
+    def _pose_landmark(landmarks, index: int) -> tuple[float, float, float]:
+        landmark = landmarks.landmark[index]
+        return landmark.x, landmark.y, landmark.z
 
     @staticmethod
     def _interpolate(values: np.ndarray) -> np.ndarray:

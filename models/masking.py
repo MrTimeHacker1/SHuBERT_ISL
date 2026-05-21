@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Tuple
+
 import torch
 from torch import nn
 
@@ -22,7 +24,7 @@ class StreamMasker(nn.Module):
         self.stream_dim = stream_dim
         self.mask_embeddings = nn.Parameter(torch.randn(num_streams, stream_dim))
 
-    def forward(self, features: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, features: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """Mask features.
 
         Args:
