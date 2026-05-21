@@ -1,0 +1,55 @@
+dataset:
+  root: /indian-slp/Dataset/ISL_Dataset/translation/isign1.0/iSign-videos_v1.1
+  num_frames: 64
+  frame_size: [256, 256]
+  recursive: true
+  extensions: [".mp4", ".MP4"]
+
+preprocessing:
+  crop_size: 224
+  mediapipe:
+    model_complexity: 1
+    min_detection_confidence: 0.5
+    min_tracking_confidence: 0.5
+
+features:
+  dino_model: dinov2_vits14
+  projection_dim: 256
+  normalize: true
+  cache_dir: cache/features
+
+clustering:
+  k: 256
+  mode: reuse  # reuse | adapt
+  asl_cluster_dir: weights/asl_clusters
+  cache_dir: cache/clusters
+  batch_size: 10000
+
+model:
+  weights_path: weights/shubert_asl.pt
+  input_dim: 1024
+  hidden_dim: 768
+  num_layers: 12
+  num_heads: 12
+  ff_dim: 3072
+  freeze_layers: 4
+  dropout: 0.1
+
+masking:
+  span_length: 3
+  mask_prob: 0.15
+
+training:
+  lr: 1e-5
+  batch_size: 16
+  epochs: 50
+  grad_accum_steps: 1
+  mixed_precision: true
+  early_stopping_patience: 5
+  checkpoint_dir: checkpoints
+  log_dir: runs
+  resume_from: null
+
+output:
+  embeddings_dir: cache/embeddings
+  cluster_maps_dir: cache/cluster_maps
