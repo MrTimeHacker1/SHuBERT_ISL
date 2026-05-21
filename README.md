@@ -12,6 +12,42 @@ We introduce SHuBERT (Sign Hidden-Unit BERT), a self-supervised contextual repre
 
 ----
 
+## ISL Adaptation Pipeline (Unlabeled Videos)
+
+This repository includes a complete pipeline to continue self-supervised pretraining of a pretrained SHuBERT model on Indian Sign Language (ISL) videos. It provides MediaPipe-based preprocessing, DINOv2 features, k-means clustering, SHuBERT SSL training, embedding extraction, and visualization utilities.
+
+### ISL Pipeline Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+### ISL Pipeline Configuration
+
+Edit `configs/config.yaml` to set your dataset root, cache directories, and pretrained weights path.
+
+### ISL Pipeline Training
+
+```bash
+python train.py
+```
+
+### ISL Pipeline Embedding Extraction
+
+```bash
+python extract_embeddings.py --video /path/to/video.mp4 --output_dir outputs
+```
+
+Outputs:
+- `outputs/embeddings.npy` (shape [T, 768])
+- `outputs/cluster_map.json`
+
+### ISL Pipeline Visualization
+
+```bash
+python visualize_embeddings.py --embeddings outputs/embeddings.npy --cluster_map outputs/cluster_map.json
+```
+
 ### Installation
 
 We provide installation and inference instructions in [QUICKSTART.md](QUICKSTART.md).

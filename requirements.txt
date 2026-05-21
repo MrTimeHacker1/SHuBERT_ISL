@@ -1,0 +1,14 @@
+torch
+torchvision
+opencv-python
+mediapipe
+scikit-learn
+numpy
+timm
+transformers
+tensorboard
+peft
+umap-learn
+matplotlib
+pyyaml
+joblib
