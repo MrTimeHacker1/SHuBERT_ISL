@@ -44,6 +44,7 @@ def cache_features(cfg: Dict) -> None:
     cropper = CropGenerator(CropConfig(crop_size=int(cfg["preprocessing"]["crop_size"])))
     feature_cfg = FeatureConfig(
         dino_model=cfg["features"]["dino_model"],
+        dino_dim=int(cfg["features"]["dino_dim"]),
         projection_dim=int(cfg["features"]["projection_dim"]),
         normalize=bool(cfg["features"]["normalize"]),
         cache_dir=Path(cfg["features"]["cache_dir"]),
@@ -60,7 +61,6 @@ def cache_features(cfg: Dict) -> None:
         landmarks = extractor.process(frames)
         crops = cropper.generate(frames, landmarks)
         features = feature_extractor.extract(crops, landmarks["body"])
-        torch.save({"source": str(path)}, output_dir / f"{path.stem}.meta.pt")
         npz_data = {
             "face": features["face"],
             "left_hand": features["left_hand"],
@@ -95,6 +95,7 @@ def train(cfg: Dict, config_path: Path) -> None:
         num_layers=int(cfg["model"]["num_layers"]),
         num_heads=int(cfg["model"]["num_heads"]),
         ff_dim=int(cfg["model"]["ff_dim"]),
+        num_clusters=int(cfg["model"]["num_clusters"]),
         dropout=float(cfg["model"]["dropout"]),
     )
     model = SHuBERTModel(model_cfg).to(device)

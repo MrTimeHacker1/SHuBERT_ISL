@@ -33,6 +33,7 @@ def main(config_path: Path) -> None:
     mode = cfg["clustering"]["mode"]
     k = int(cfg["clustering"]["k"])
     batch_size = int(cfg["clustering"]["batch_size"])
+    feature_dim = int(cfg["features"]["projection_dim"])
 
     cluster_dir.mkdir(parents=True, exist_ok=True)
 
@@ -59,7 +60,7 @@ def main(config_path: Path) -> None:
     for part in ["face", "left_hand", "right_hand", "body"]:
         init_centers = centers[part] if centers is not None else None
         models[part] = build_kmeans(
-            features=_load_seed_features(feature_dir, part),
+            features=_load_seed_features(feature_dir, part, feature_dim),
             k=k,
             batch_size=batch_size,
             init_centers=init_centers,
@@ -74,12 +75,12 @@ def main(config_path: Path) -> None:
         save_kmeans(model, cluster_dir / f"{part}_kmeans.pkl")
 
 
-def _load_seed_features(feature_dir: Path, part: str) -> "np.ndarray":
+def _load_seed_features(feature_dir: Path, part: str, feature_dim: int) -> "np.ndarray":
     for feature_path in iter_feature_files(feature_dir):
         data = load_feature_file(feature_path)
         if data[part].shape[0] > 0:
             return data[part]
-    return np.zeros((1, 256), dtype=np.float32)
+    return np.zeros((1, feature_dim), dtype=np.float32)
 
 
 if __name__ == "__main__":

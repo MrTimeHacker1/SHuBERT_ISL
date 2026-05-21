@@ -15,6 +15,7 @@ class SHuBERTConfig:
     num_layers: int = 12
     num_heads: int = 12
     ff_dim: int = 3072
+    num_clusters: int = 256
     dropout: float = 0.1
 
 
@@ -37,10 +38,10 @@ class SHuBERTModel(nn.Module):
 
         self.heads = nn.ModuleDict(
             {
-                "face": nn.Linear(config.hidden_dim, 256),
-                "left": nn.Linear(config.hidden_dim, 256),
-                "right": nn.Linear(config.hidden_dim, 256),
-                "body": nn.Linear(config.hidden_dim, 256),
+                "face": nn.Linear(config.hidden_dim, config.num_clusters),
+                "left": nn.Linear(config.hidden_dim, config.num_clusters),
+                "right": nn.Linear(config.hidden_dim, config.num_clusters),
+                "body": nn.Linear(config.hidden_dim, config.num_clusters),
             }
         )
 

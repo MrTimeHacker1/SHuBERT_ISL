@@ -8,6 +8,10 @@ from typing import List, Tuple
 import numpy as np
 
 from preprocessing.video_loader import read_video, resize_frames
+from utils.logger import setup_logger
+
+
+logger = setup_logger(__name__)
 
 
 @dataclass
@@ -40,6 +44,7 @@ class ISLVideoDataset:
         path = self.video_paths[index]
         frames, _ = read_video(path)
         if not frames:
+            logger.warning("Failed to load video: %s", path)
             frames = [np.zeros((self.config.frame_size[1], self.config.frame_size[0], 3), dtype=np.uint8)]
 
         frames = resize_frames(frames, self.config.frame_size)

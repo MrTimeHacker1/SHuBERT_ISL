@@ -58,7 +58,9 @@ class Trainer:
     def train(self, dataloader: DataLoader, epochs: int) -> None:
         global_step = 0
         if len(dataloader) == 0:
-            raise ValueError("Dataloader is empty. Ensure features and clusters are available.")
+            raise ValueError(
+                "Dataloader is empty. Run feature extraction and clustering before training."
+            )
         for epoch in range(1, epochs + 1):
             epoch_loss = 0.0
             self.model.train()

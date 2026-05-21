@@ -16,7 +16,7 @@ def load_cluster_labels(cluster_map_path: Path) -> Optional[np.ndarray]:
         return None
     with open(cluster_map_path, "r") as f:
         data = json.load(f)
-    labels = [entry["face"] for entry in data.values()]
+    labels = [entry.get("face", 0) for entry in data.values()]
     return np.array(labels)
 
 

@@ -14,6 +14,7 @@ from torchvision import transforms
 @dataclass
 class FeatureConfig:
     dino_model: str = "dinov2_vits14"
+    dino_dim: int = 384
     projection_dim: int = 256
     normalize: bool = True
     cache_dir: Path = Path("cache/features")
@@ -115,7 +116,8 @@ class FeatureExtractor:
     def _load_or_create_projectors(self) -> Tuple[nn.Linear, nn.Linear]:
         self.config.cache_dir.mkdir(parents=True, exist_ok=True)
         proj_path = self.config.cache_dir / "projectors.pt"
-        face_proj = nn.Linear(384, self.config.projection_dim, bias=True)
+        # DINOv2 ViT-S outputs 384-dim features by default.
+        face_proj = nn.Linear(self.config.dino_dim, self.config.projection_dim, bias=True)
         pose_proj = nn.Linear(14, self.config.projection_dim, bias=True)
         if proj_path.exists():
             state = torch.load(proj_path, map_location="cpu")

@@ -86,14 +86,14 @@ class MediaPipeExtractor:
     def _interpolate(values: np.ndarray) -> np.ndarray:
         """Interpolate NaNs along time dimension for each landmark coordinate."""
         output = values.copy()
-        time_dim = output.shape[0]
-        for i in range(output.shape[1]):
-            for j in range(output.shape[2]):
-                series = output[:, i, j]
-                nan_mask = np.isnan(series)
-                if nan_mask.all():
-                    output[:, i, j] = 0.0
-                    continue
-                valid_idx = np.where(~nan_mask)[0]
-                output[nan_mask, i, j] = np.interp(np.where(nan_mask)[0], valid_idx, series[valid_idx])
-        return output
+        time_steps = output.shape[0]
+        flattened = output.reshape(time_steps, -1)
+        for col in range(flattened.shape[1]):
+            series = flattened[:, col]
+            nan_mask = np.isnan(series)
+            if nan_mask.all():
+                flattened[:, col] = 0.0
+                continue
+            valid_idx = np.where(~nan_mask)[0]
+            flattened[nan_mask, col] = np.interp(np.where(nan_mask)[0], valid_idx, series[valid_idx])
+        return flattened.reshape(output.shape)

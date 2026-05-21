@@ -50,7 +50,9 @@ class StreamMasker(nn.Module):
         return masked, mask
 
     def _generate_mask(self, time_steps: int, batch_size: int, device: torch.device) -> torch.Tensor:
-        span = self.config.span_length
+        if time_steps == 0:
+            return torch.zeros((batch_size, 0), dtype=torch.bool, device=device)
+        span = min(self.config.span_length, time_steps)
         num_spans = max(1, int(time_steps * self.config.mask_prob / span))
         mask = torch.zeros((batch_size, time_steps), dtype=torch.bool, device=device)
         for b in range(batch_size):

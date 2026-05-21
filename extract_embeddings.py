@@ -48,6 +48,7 @@ def main() -> None:
 
     feature_cfg = FeatureConfig(
         dino_model=cfg["features"]["dino_model"],
+        dino_dim=int(cfg["features"]["dino_dim"]),
         projection_dim=int(cfg["features"]["projection_dim"]),
         normalize=bool(cfg["features"]["normalize"]),
         cache_dir=Path(cfg["features"]["cache_dir"]),
@@ -62,6 +63,7 @@ def main() -> None:
         num_layers=int(cfg["model"]["num_layers"]),
         num_heads=int(cfg["model"]["num_heads"]),
         ff_dim=int(cfg["model"]["ff_dim"]),
+        num_clusters=int(cfg["model"]["num_clusters"]),
         dropout=float(cfg["model"]["dropout"]),
     )
     model = SHuBERTModel(model_cfg).to(device)

@@ -3,11 +3,15 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Optional
+import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.manifold import TSNE
 import umap
+
+
+logger = logging.getLogger(__name__)
 
 
 def plot_tsne(embeddings: np.ndarray, labels: Optional[np.ndarray], output_path: Path) -> None:
@@ -46,6 +50,7 @@ def plot_temporal_trajectory(embeddings: np.ndarray, output_path: Path) -> None:
         output_path: Path to save the plot.
     """
     if embeddings.ndim != 2 or embeddings.shape[1] < 2 or embeddings.shape[0] < 2:
+        logger.warning("Skipping trajectory plot due to insufficient embedding dimensions.")
         return
     coords = embeddings[:, :2]
     plt.figure(figsize=(8, 6))
